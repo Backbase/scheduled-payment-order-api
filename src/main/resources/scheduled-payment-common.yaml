@@ -1,0 +1,149 @@
+openapi: 3.0.3
+
+info:
+  title: OpenAPI Scheduled Payment Orders Common
+  description: Common items to use in schemas.
+  version: 3.0.3
+
+paths: { }
+
+components:
+  schemas:
+    ValidateExecutionDateResponse:
+      type: object
+      properties:
+        originalExecutionDate:
+          type: string
+          format: date
+        nextAvailableExecutionDateBefore:
+          type: string
+          format: date
+        nextAvailableExecutionDateAfter:
+          type: string
+          format: date
+        status:
+          type: string
+          enum: [ OK, RESTRICTED_DATE_DETECTED ]
+      example:
+        $ref: 'examples/example-validate-execution-date-response.json'
+
+    PostScheduledPaymentOrderTransactionRequest:
+      type: object
+      properties:
+        scheduledPaymentOrderId:
+          type: string
+        bankReferenceId:
+          type: string
+        amount:
+          type: number
+        executionDate:
+          type: string
+          format: date
+        status:
+          type: string
+          enum: [PROCESSED, ACCEPTED, REJECTED]
+        reasonCode:
+          type: string
+        reasonText:
+          type: string
+        errorDescription:
+          type: string
+      required:
+        - scheduledPaymentOrderId
+        - executionDate
+        - status
+      example:
+        $ref: 'examples/example-post-scheduled-payment-order-transactions-request.json'
+
+    GetScheduledPaymentOrderTransactionResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/ScheduledPaymentOrderTransactionItem'
+
+    ScheduledPaymentOrderTransactionItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        scheduledPaymentOrderId:
+          type: string
+        bankReferenceId:
+          type: string
+        amount:
+          type: number
+        executionDate:
+          type: string
+          format: date
+        status:
+          type: string
+          enum: [ PROCESSED, ACCEPTED, REJECTED ]
+        reasonCode:
+          type: string
+        reasonText:
+          type: string
+        errorDescription:
+          type: string
+      example:
+        $ref: 'examples/example-post-scheduled-payment-order-transactions-request.json'
+
+    PostScheduledPaymentOrderTransactionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+      example:
+        $ref: 'examples/example-validate-execution-date-response.json'
+
+  parameters:
+    executionDateParam:
+      name: executionDate
+      description: The execution date of the scheduled payment order
+      in: path
+      required: true
+      schema:
+        type: string
+        format: date
+
+    scheduledPaymentOrderIdParam:
+      name: scheduledPaymentOrderId
+      description: The internalId of the scheduled payment order in DBS
+      in: query
+      required: true
+      schema:
+        type: string
+
+    fromPaginationParam:
+      name: from
+      description: Page Number. Skip over pages of elements by specifying a start value for the query.
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+
+    sizePaginationParam:
+      name: size
+      description: Limit the number of elements in the response.
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 10
+
+    directionParam:
+      name: direction
+      description: Direction.
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - ASC
+          - DESC
+        default: DESC
+
+
+
+

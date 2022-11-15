@@ -1,0 +1,4 @@
+title: Messages
+type: array
+items:
+  $ref: '../scheduled-payment-common.yaml#/components/schemas/MessageItem'

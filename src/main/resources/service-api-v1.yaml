@@ -1,0 +1,90 @@
+openapi: 3.0.3
+info:
+  title: Scheduled Payment Order Service API Spec
+  description: Specs for Scheduled Payment Order Service API
+  version: 1.1.0
+  x-icon: credit_card
+
+servers:
+  - description: local test
+    url: http://localhost:8080/api/v1
+
+tags:
+  - name: Retail
+  - name: Business
+
+paths:
+
+  /service-api/v1/scheduled-payment-orders/execution-dates/{executionDate}/validate:
+    description: Checks the validity of the execution date. If the given execution date falls on a restricted date then alternative dates will be returned
+    parameters:
+      - $ref: 'scheduled-payment-common.yaml#/components/parameters/executionDateParam'
+    get:
+      summary: Checks the validity of the execution date. If the given execution date falls on a restricted date then alternative dates will be returned
+      description: Checks the validity of the execution date. If the given execution date falls on a restricted date then alternative dates will be returned
+      operationId: validateExecutionDate
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: 'scheduled-payment-common.yaml#/components/schemas/ValidateExecutionDateResponse'
+          description: Successful validate execution date API response
+        "400":
+          $ref: 'lib/common-types.yaml#/components/responses/400BadRequest'
+        "500":
+          $ref: 'lib/common-types.yaml#/components/responses/500InternalServerError'
+      tags:
+        - scheduledPaymentOrder
+
+  /service-api/v1/scheduled-payment-orders/transactions:
+    description: Manage transactional records for executed payment orders containing the result of the execution
+    post:
+      summary: Creates a transactional record for an executed payment order containing the result of the execution
+      description: Creates a transactional record for an executed payment order containing the result of the execution
+      operationId: postScheduledPaymentOrderTransaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: 'scheduled-payment-common.yaml#/components/schemas/PostScheduledPaymentOrderTransactionRequest'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: 'scheduled-payment-common.yaml#/components/schemas/PostScheduledPaymentOrderTransactionResponse'
+          description: Successful post scheduled payment order transaction API response
+        "400":
+          $ref: 'lib/common-types.yaml#/components/responses/400BadRequest'
+        "500":
+          $ref: 'lib/common-types.yaml#/components/responses/500InternalServerError'
+      tags:
+        - scheduledPaymentOrder
+    get:
+      summary: Retrieves a list of transaction records for an executed scheduled payment order
+      description: Retrieves a list of transaction records for an executed scheduled payment order
+      operationId: getScheduledPaymentOrderTransactions
+      parameters:
+        - $ref: 'scheduled-payment-common.yaml#/components/parameters/scheduledPaymentOrderIdParam'
+        - $ref: 'scheduled-payment-common.yaml#/components/parameters/fromPaginationParam'
+        - $ref: 'scheduled-payment-common.yaml#/components/parameters/sizePaginationParam'
+        - $ref: 'scheduled-payment-common.yaml#/components/parameters/directionParam'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: 'scheduled-payment-common.yaml#/components/schemas/GetScheduledPaymentOrderTransactionResponse'
+          description: Successful get scheduled payment order transactions API response
+        "400":
+          $ref: 'lib/common-types.yaml#/components/responses/400BadRequest'
+        "500":
+          $ref: 'lib/common-types.yaml#/components/responses/500InternalServerError'
+      tags:
+        - scheduledPaymentOrder
+

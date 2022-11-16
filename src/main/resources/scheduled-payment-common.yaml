@@ -48,6 +48,8 @@ components:
           type: string
         errorDescription:
           type: string
+        additions:
+          $ref: '#/components/schemas/Additions'
       required:
         - scheduledPaymentOrderId
         - executionDate
@@ -83,6 +85,8 @@ components:
           type: string
         errorDescription:
           type: string
+        additions:
+          $ref: '#/components/schemas/Additions'
       example:
         $ref: 'examples/example-post-scheduled-payment-order-transactions-request.json'
 
@@ -93,6 +97,12 @@ components:
           type: string
       example:
         $ref: 'examples/example-validate-execution-date-response.json'
+
+    Additions:
+      type: object
+      additionalProperties:
+        type: string
+      description: Additional properties
 
   parameters:
     executionDateParam:
